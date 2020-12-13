@@ -1,9 +1,13 @@
 package dictionary;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Arrays;
+import java.util.List;
 
 /*
  * Utility class for reading from files.
@@ -17,31 +21,36 @@ public class readfile {
 	 * @return an array list that contains only the legal strings
 	 * @throws FileNotFoundException if file not found
 	 */
-	public ArrayList<String> cleanfile(String filename) throws FileNotFoundException {
+	public List<String> cleanfile(String filename) {
+		
+		List<String> cleanedList = new ArrayList<String>();
 		
 		//create file object
-		File file = new File(filename);
+		File inputFile = new File(filename);
+		BufferedReader file = null;
 		
-		ArrayList<String> cleanedList = new ArrayList<String>();
-		
-		//create scanner with given file
-		Scanner scanner = new Scanner(file);
-		
-		//while scanner has another token to read
-		while(scanner.hasNext()) {
-			 
-			//get next token
-			String nextToken = scanner.next();
+		try {
+			file = new BufferedReader (new FileReader(inputFile));
 			
-			//check validity with the helper method
-			if (this.checkValid(nextToken)) {
-				//add the token into the output list if it is valid
-				cleanedList.add(nextToken);
+			String word = "";
+			
+			//read each word
+			while((word = file.readLine()) != null) {
+				
+				//strip whitespace from beginning and end
+				word = word.strip();
+				
+				//if line is valid
+				if (this.checkValid(word)) {
+					cleanedList.add(word);
+				}
 			}
+			//check for the exceptions
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
-		//close the scanner
-		scanner.close();
 		
 		//return the cleanedList without any illegal string
 		return cleanedList;
@@ -59,30 +68,10 @@ public class readfile {
 		char [] charArray = str.toCharArray();
 		
 		//create an array list to store invalid punctuation
-		ArrayList<String> invalidChars = new ArrayList<String>() {
-			{
-				add(".");
-				add("-");
-				add(" ");
-				add("'");
-			}
-		};
-		
+		List<String> invalidChars = Arrays.asList(".","-"," ","'");
+
 		//create an array list to store invalid digits
-		ArrayList<String> digits = new ArrayList<String>() {
-			{
-				add("0");
-				add("1");
-				add("2");
-				add("3");
-				add("4");
-				add("5");
-				add("6");
-				add("7");
-				add("8");
-				add("9");
-			}
-		};
+		List<String> digits = Arrays.asList("0","1","2","3","4","5","6","7","8","9");
 		
 		//iterate through every character in the given string to check validity
 		for(int i = 0; i < charArray.length; i++) {
