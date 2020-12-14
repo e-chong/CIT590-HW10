@@ -39,7 +39,7 @@ public class HangmanGame {
 		// Choose traditional or evil
 //		Random rand = new Random();
 //		boolean traditional = rand.nextBoolean();
-		boolean traditional = false;
+		boolean traditional = true;
 
 		if (traditional) {
 			// Initialize a traditional hangman game

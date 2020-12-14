@@ -181,8 +181,6 @@ public class Hangman {
 	public boolean checkGameStatus() {
 		String currentLetters = this.getCorrectGuesses().stream().map(String::valueOf).collect(Collectors.joining());
 
-		System.out.println(currentLetters);
-
 		if (currentLetters.equals(this.getWord())) {
 			return true;
 		} else {
@@ -220,7 +218,6 @@ public class Hangman {
 
 		// check whether it is in the correct list
 		if (this.getCorrectGuesses().contains(letter) || this.getIncorrectGuesses().contains(letter)) {
-			System.out.println("You've already guessed this letter! Please choose another.");
 			return true;
 		}
 		// return false if it is not in either list
@@ -239,6 +236,8 @@ public class Hangman {
 		if (this.alreadyGuessed(letter) == false) {
 			// increment the count by one
 			this.count++;
+		} else {
+			System.out.println("You've already guessed this letter! Please choose another.");
 		}
 
 	}
