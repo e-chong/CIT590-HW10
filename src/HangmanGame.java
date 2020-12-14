@@ -39,7 +39,7 @@ public class HangmanGame {
 		// Choose traditional or evil
 //		Random rand = new Random();
 //		boolean traditional = rand.nextBoolean();
-		boolean traditional = true;
+		boolean traditional = false;
 
 		if (traditional) {
 			// Initialize a traditional hangman game
@@ -72,7 +72,7 @@ public class HangmanGame {
 				// check the letter
 				hangman.checkLetter(letter);
 				
-				// debug
+				// set the new word based on evil criteria.
 				hangman.setNewWord(letter);
 
 				gameState = hangman.checkGameStatus();

@@ -103,15 +103,15 @@ public class EvilHangman extends Hangman {
 	 */
 	public void setNewWord(char letter) {
 
-		System.out.println(this.getWord());
+		System.out.println("Current word: " + this.getWord());
+		
 		// Use the current guesses to filter the list of possible words
-		
-//		System.out.println(this.filterWords().size());
-
-
 		String newWord = this.randomChoose(letter, this.filterWords());
+		System.out.println("New word: " + newWord);
 		
-		System.out.println(newWord);
+		this.setWord(newWord);
+		
+		
 
 	}
 
@@ -193,9 +193,8 @@ public class EvilHangman extends Hangman {
 
 		// initialize a list of list to store the sublists
 		// same length with the number of unique combinations
-		ArrayList<ArrayList<String>> subLists = new ArrayList<ArrayList<String>>(combinations);		
+		ArrayList<ArrayList<String>> subLists = new ArrayList<>();		
 		
-		System.out.println("longest LENGTH is " + combinations);
 		for (int i = 0; i < filterWords.size(); i++) {
 
 			// store the word
@@ -207,9 +206,11 @@ public class EvilHangman extends Hangman {
 			// iterate through all existing unique combinations, and put the word into the
 			// corresponding one
 			for (int j = 0; j < combinations; j++) {
+				
+				subLists.add(new ArrayList<String>());
 
 				// check which combination the word corresponds to
-				if (indices == uniqueCombinations.get(j)) {
+				if (indices.equals(uniqueCombinations.get(j))) {
 
 					// put the word into the corresponding position into the list of sublists
 					subLists.get(j).add(word);
@@ -218,7 +219,6 @@ public class EvilHangman extends Hangman {
 		}
 		// return all subLists with words inside
 		// each subList corresponds to one combination of the given letter
-		
 		return subLists;
 	}
 
@@ -262,7 +262,6 @@ public class EvilHangman extends Hangman {
 			}
 		}
 		// return the longest sub list as result
-		
 		return longest;
 	}
 
@@ -282,7 +281,6 @@ public class EvilHangman extends Hangman {
 
 		// find the length the longest list
 		int len = this.longestList(letter, filterWords).size();
-//		System.out.println("LENGTH is " + len);
 
 		// generate a random index within the given range
 		int index = rand.nextInt(len);
