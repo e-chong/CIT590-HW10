@@ -16,7 +16,23 @@ public class HangmanGame {
 		String filename = "words.txt";
 		List<String> cleanWords = new dictionary.ReadFile().cleanFile(filename);
 
-		new HangmanGame().run(cleanWords);
+		// welcome message
+		printWelcome();
+
+		// initialize scanner
+		Scanner scanner = new Scanner(System.in);
+
+		boolean keepPlaying = true;
+
+		while (keepPlaying) {
+
+			new HangmanGame().run(cleanWords, scanner);
+
+			keepPlaying = askPlayAgain(scanner);
+
+		}
+
+		scanner.close();
 
 	}
 
@@ -25,21 +41,14 @@ public class HangmanGame {
 	 * 
 	 * @param words - list of eligible words
 	 */
-	public void run(List<String> words) {
-
-		// welcome message
-		this.printWelcome();
-
-		// initialize scanner
-		Scanner scanner = new Scanner(System.in);
+	public void run(List<String> words, Scanner scanner) {
 
 		// initialize a game state
 		boolean gameState = false;
 
 		// Choose traditional or evil
-//		Random rand = new Random();
-//		boolean traditional = rand.nextBoolean();
-		boolean traditional = false;
+		Random rand = new Random();
+		boolean traditional = rand.nextBoolean();
 
 		if (traditional) {
 			// Initialize a traditional hangman game
@@ -58,7 +67,8 @@ public class HangmanGame {
 
 			}
 
-			this.printGameOver(hangman);
+			this.printGameOver(hangman, traditional);
+
 		} else {
 			// Initialize an evil hangman game
 			EvilHangman hangman = new EvilHangman(words);
@@ -71,7 +81,7 @@ public class HangmanGame {
 
 				// check the letter
 				hangman.checkLetter(letter);
-				
+
 				// set the new word based on evil criteria.
 				hangman.setNewWord(letter);
 
@@ -79,11 +89,10 @@ public class HangmanGame {
 
 			}
 
-			this.printGameOver(hangman);
+			this.printGameOver(hangman, traditional);
 
 		}
 
-		scanner.close();
 	}
 
 	/**
@@ -103,16 +112,56 @@ public class HangmanGame {
 	/**
 	 * Prints a welcome message.
 	 */
-	void printWelcome() {
+	static void printWelcome() {
 		System.out.println("Welcome to Hangman!");
 		System.out.println("This game may or may not be EVIL. O_O");
 		System.out.println("");
 	}
 
-	void printGameOver(Hangman hangman) {
+	/**
+	 * Print a game over message with some helpful info about the player's
+	 * performance and the type of game they played.
+	 * 
+	 * @param hangman
+	 * @param traditional
+	 */
+	void printGameOver(Hangman hangman, boolean traditional) {
 		System.out.println("Game over!");
 		System.out.println("You successfully spelled " + hangman.getWord());
 		System.out.println("It took you " + hangman.getCount() + " guesses.");
+
+		if (traditional) {
+			System.out.println("You played a traditional game of Hangman.");
+		} else {
+			System.out.println("You played an EVIL game of Hangman.");
+		}
+
+	}
+
+	/**
+	 * Asks the player if they want to play again.
+	 * 
+	 * @param scanner
+	 * @return
+	 */
+	static boolean askPlayAgain(Scanner scanner) {
+		System.out.println("Play again (y/n)? ");
+		char answer = Character.toLowerCase(scanner.next().charAt(0));
+
+		while (answer != 'y' && answer != 'n') {
+			System.out.println("Please respond with a 'y' or 'n'. ");
+			answer = Character.toLowerCase(scanner.next().charAt(0));
+		}
+
+		boolean result = false;
+
+		if (answer == 'y') {
+			result = true;
+		} else if (answer == 'n') {
+			result = false;
+		}
+
+		return result;
 	}
 
 }
