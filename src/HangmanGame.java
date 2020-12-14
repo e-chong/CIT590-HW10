@@ -28,6 +28,8 @@ public class HangmanGame {
 
 			new HangmanGame().run(cleanWords, scanner);
 
+			System.out.println("");
+
 			keepPlaying = askPlayAgain(scanner);
 
 		}
