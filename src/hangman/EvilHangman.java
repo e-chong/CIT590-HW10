@@ -1,44 +1,118 @@
 package hangman;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
- * 
+ * Class for the evil version of Hangman
  *
  */
-public class Evil {
+public class EvilHangman extends Hangman {
+
+	private List<String> words;
+
+	/**
+	 * 
+	 * @param words
+	 */
+	public EvilHangman(List<String> words) {
+
+		// Set the Word Array
+		this.setWordArray(words);
+
+		Random rand = new Random();
+		String randomWord = words.get(rand.nextInt(words.size()));
+		this.setWord(randomWord);
+
+		// fill the correctGuess array with _
+		this.initializeCorrectGuess(this.getWord());
+
+	}
+
+	// Getters
+	/**
+	 * 
+	 * @return the clean word array list
+	 */
+	private List<String> getWordArray() {
+		return this.words;
+	}
+
+	// Setters
+	/**
+	 * Store the clean word array list
+	 * 
+	 * @param words
+	 */
+	private void setWordArray(List<String> words) {
+		this.words = words;
+	}
 
 	/**
 	 * Perform the initial filter upon the length of the chosen word
 	 * 
-	 * @param word
-	 * @param cleanfile
 	 * 
 	 * @return newList
 	 */
-	private ArrayList<String> filterWords(String word, ArrayList<String> cleanfile) {
+	private ArrayList<String> filterWords() {
 
 		// get the length of the initial word chosen by the computer
-		int len = word.length();
+		int len = this.getWord().length();
 
 		// initialize a new array list to store the words with the same length
 		ArrayList<String> newList = new ArrayList<String>();
 
 		// iterate through all words
-		for (int i = 0; i < cleanfile.size(); i++) {
+		for (int i = 0; i < this.getWordArray().size(); i++) {
 
 			// store the string
-			String token = cleanfile.get(i);
+			String token = this.getWordArray().get(i);
 
-			// check the length
-			// put the words with the given length into the new list
+			// get the array of correctGuesses so far
+			ArrayList<Character> correctGuesses = this.getCorrectGuesses();
+
+			// If the length of a given word is the same length as the current word
 			if (token.length() == len) {
-				newList.add(token);
+
+				int tokenCounter = 0;
+				// And every character in the given word is either a "_" or matches a character
+				// in correctGuesses at the same index
+				for (int j = 0; j < correctGuesses.size(); j++) {
+
+					if (correctGuesses.get(j).equals("_".charAt(0)) || correctGuesses.get(j).equals(token.charAt(j))) {
+						tokenCounter++;
+					}
+				}
+				// Then add the given word to a list of new possible words.
+				if (tokenCounter == token.length()) {
+					newList.add(token);
+				}
+
 			}
 		}
 		// return the filtered list with only the words with the given length
 		return newList;
+	}
+
+	/**
+	 * Choose a newWord based on the letters already guessed and the letter most
+	 * recently guessed.
+	 * 
+	 * @param letter
+	 */
+	public void setNewWord(char letter) {
+
+		System.out.println(this.getWord());
+		// Use the current guesses to filter the list of possible words
+		
+//		System.out.println(this.filterWords().size());
+
+
+		String newWord = this.randomChoose(letter, this.filterWords());
+		
+		System.out.println(newWord);
+
 	}
 
 	/**
@@ -65,6 +139,7 @@ public class Evil {
 				indices.add(i);
 			}
 		}
+		
 		// if the letter never occurs, the return list should be empty
 		return indices;
 	}
@@ -97,6 +172,7 @@ public class Evil {
 			}
 		}
 		// return the unique combinations
+		
 		return uniqueCombinations;
 	}
 
@@ -117,8 +193,9 @@ public class Evil {
 
 		// initialize a list of list to store the sublists
 		// same length with the number of unique combinations
-		ArrayList<ArrayList<String>> subLists = new ArrayList<ArrayList<String>>(combinations);
-
+		ArrayList<ArrayList<String>> subLists = new ArrayList<ArrayList<String>>(combinations);		
+		
+		System.out.println("longest LENGTH is " + combinations);
 		for (int i = 0; i < filterWords.size(); i++) {
 
 			// store the word
@@ -141,6 +218,7 @@ public class Evil {
 		}
 		// return all subLists with words inside
 		// each subList corresponds to one combination of the given letter
+		
 		return subLists;
 	}
 
@@ -163,7 +241,7 @@ public class Evil {
 
 		// initialize an integer to record the largest length
 		int maxLen = 0;
-
+		
 		// iterate through all sublists to find their lengths
 		for (int i = 0; i < subLists.size(); i++) {
 
@@ -172,7 +250,7 @@ public class Evil {
 
 			// store the length
 			int len = sub.size();
-
+			
 			// check if the sublist is longer
 			if (len > maxLen) {
 
@@ -184,12 +262,13 @@ public class Evil {
 			}
 		}
 		// return the longest sub list as result
+		
 		return longest;
 	}
 
 	/**
-	 * since the input of the traditional form is a word so choose a random word
-	 * from the longest sublist as benchmark
+	 * since the input of the traditional form is a word, choose a random word from
+	 * the longest sublist as benchmark
 	 * 
 	 * @param letter
 	 * 
@@ -197,12 +276,13 @@ public class Evil {
 	 * 
 	 * @return wordChosen
 	 */
-	private String randomChose(char letter, ArrayList<String> filterWords) {
+	private String randomChoose(char letter, ArrayList<String> filterWords) {
 
 		Random rand = new Random();
 
 		// find the length the longest list
 		int len = this.longestList(letter, filterWords).size();
+//		System.out.println("LENGTH is " + len);
 
 		// generate a random index within the given range
 		int index = rand.nextInt(len);
@@ -216,63 +296,3 @@ public class Evil {
 	}
 
 }
-
-//	/*
-//	 * 
-//	 */
-//	private ArrayList<String> partitionAndSelection(char letter, ArrayList<String> newList){
-//		
-//		//partition the entire list to several sublists according to the position of the letter input
-//		
-//		//first categorize words by the number of the chosen letter included
-//		ArrayList<String> noletter = new ArrayList<String> ();
-//		ArrayList<String> oneletter = new ArrayList<String> ();
-//		ArrayList<String> twoletter = new ArrayList<String> ();
-//		ArrayList<String> threeletter = new ArrayList<String> ();
-//		ArrayList<String> fourletter = new ArrayList<String> ();
-//		
-//		for (int i = 0; i < newList.size(); i++) {
-//			
-//			//store the word
-//			String word = newList.get(i);
-//			
-//			if (this.letterCount(word, letter) == 0) {
-//				noletter.add(word);
-//			} else if (this.letterCount(word, letter) == 1) {
-//				oneletter.add(word);
-//			} else if (this.letterCount(word, letter) == 2) {
-//				twoletter.add(word);
-//			} else if (this.letterCount(word, letter) == 3) {
-//				threeletter.add(word);
-//			} else if (this.letterCount(word, letter) == 4) {
-//				fourletter.add(word);
-//			}
-//		}
-//	}
-
-//	/*
-//	 * count the number of a specific letter in a word
-//	 * 
-//	 * @param word
-//	 * @param letter
-//	 * 
-//	 * @return count
-//	 */
-//	int letterCount(String word, char letter) {
-//		
-//		int count = 0;
-//		
-//		//convert String to char array
-//		char [] charArray = word.toCharArray();
-//		
-//		//iterate through all letters in the word
-//		for (int i = 0; i < word.length(); i++) {
-//			
-//			//increment the count when equals
-//			if (charArray[i] == letter) {
-//				count++;
-//			}
-//		}
-//	
-//		return count;
-//	}

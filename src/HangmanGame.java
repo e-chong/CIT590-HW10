@@ -1,12 +1,12 @@
 import java.util.List;
-
 import java.util.Scanner;
-
+import java.util.Random;
 import hangman.*;
 
 /**
  * Controller class for the hangman game.
- * @ author Tianxiao Zhang, Eugene Chong
+ * 
+ * @author Tianxiao Zhang, Eugene Chong
  * 
  */
 public class HangmanGame {
@@ -30,36 +30,68 @@ public class HangmanGame {
 		// welcome message
 		this.printWelcome();
 
-		// Initialize a traditional hangman game
-		TraditionalHangman hangman = new TraditionalHangman(words);
-
 		// initialize scanner
 		Scanner scanner = new Scanner(System.in);
 
+		// initialize a game state
 		boolean gameState = false;
-		// run
-		while (gameState == false) {
-			// ask for the next letter
-			this.askNextLetter(hangman);
-			char letter = Character.toLowerCase(scanner.next().charAt(0));
-			
-			// check the letter
-			hangman.checkLetter(letter);
-			
-			gameState = hangman.checkGameStatus();
+
+		// Choose traditional or evil
+//		Random rand = new Random();
+//		boolean traditional = rand.nextBoolean();
+		boolean traditional = false;
+
+		if (traditional) {
+			// Initialize a traditional hangman game
+			TraditionalHangman hangman = new TraditionalHangman(words);
+
+			// run
+			while (gameState == false) {
+				// ask for the next letter
+				this.askNextLetter(hangman);
+				char letter = Character.toLowerCase(scanner.next().charAt(0));
+
+				// check the letter
+				hangman.checkLetter(letter);
+
+				gameState = hangman.checkGameStatus();
+
+			}
+
+			this.printGameOver(hangman);
+		} else {
+			// Initialize an evil hangman game
+			EvilHangman hangman = new EvilHangman(words);
+
+			// run
+			while (gameState == false) {
+				// ask for the next letter
+				this.askNextLetter(hangman);
+				char letter = Character.toLowerCase(scanner.next().charAt(0));
+
+				// check the letter
+				hangman.checkLetter(letter);
+				
+				// debug
+				hangman.setNewWord(letter);
+
+				gameState = hangman.checkGameStatus();
+
+			}
+
+			this.printGameOver(hangman);
 
 		}
 
-		this.printGameOver(hangman);
-		
 		scanner.close();
 	}
-	
+
 	/**
 	 * Asks the player for the next letter and prints some updates on the game.
+	 * 
 	 * @param hangman
 	 */
-	void askNextLetter(TraditionalHangman hangman) {
+	void askNextLetter(Hangman hangman) {
 		System.out.println("");
 		System.out.println("What letter do you want to guess next? Enter just one letter. ");
 		hangman.printCorrectGuess();
@@ -76,8 +108,8 @@ public class HangmanGame {
 		System.out.println("This game may or may not be EVIL. O_O");
 		System.out.println("");
 	}
-	
-	void printGameOver(TraditionalHangman hangman) {
+
+	void printGameOver(Hangman hangman) {
 		System.out.println("Game over!");
 		System.out.println("You successfully spelled " + hangman.getWord());
 		System.out.println("It took you " + hangman.getCount() + " guesses.");
