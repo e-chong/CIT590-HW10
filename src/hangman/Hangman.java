@@ -16,7 +16,7 @@ public class Hangman {
 	private String word;
 
 	// record the correct guesses
-	private ArrayList<Character> correctGuess;
+	public ArrayList<Character> correctGuess;
 
 	// record the incorrect guesses
 	private ArrayList<Character> incorrectGuess = new ArrayList<Character>();
@@ -77,7 +77,6 @@ public class Hangman {
 		} else {
 			this.addIncorrectGuess(letter);
 		}
-
 	}
 
 	/**
@@ -140,7 +139,6 @@ public class Hangman {
 				this.correctGuess.set(i, letter);
 			}
 		}
-
 	}
 
 	/**
@@ -170,7 +168,6 @@ public class Hangman {
 	 */
 	public void printGuessCount() {
 		System.out.println("Total guesses: " + this.getCount());
-
 	}
 
 	/**
@@ -180,13 +177,14 @@ public class Hangman {
 	 */
 	public boolean checkGameStatus() {
 		String currentLetters = this.getCorrectGuesses().stream().map(String::valueOf).collect(Collectors.joining());
-
-		if (currentLetters.equals(this.getWord())) {
+		
+		String word = this.getWord();
+		
+		if (currentLetters.equals(word)) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 
 	/**
@@ -204,7 +202,6 @@ public class Hangman {
 				incorrectGuess.add(letter);
 			}
 		}
-
 	}
 
 	/**

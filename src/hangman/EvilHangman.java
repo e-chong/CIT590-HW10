@@ -13,6 +13,7 @@ public class EvilHangman extends Hangman {
 	private List<String> words;
 
 	/**
+	 * Constructor
 	 * 
 	 * @param words
 	 */
@@ -88,7 +89,6 @@ public class EvilHangman extends Hangman {
 				if (tokenCounter == token.length()) {
 					newList.add(token);
 				}
-
 			}
 		}
 		// return the filtered list with only the words with the given length
@@ -103,15 +103,13 @@ public class EvilHangman extends Hangman {
 	 */
 	public void setNewWord(char letter) {
 
-		System.out.println("Current word: " + this.getWord());
+		//System.out.println("Current word: " + this.getWord());
 		
 		// Use the current guesses to filter the list of possible words
 		String newWord = this.randomChoose(letter, this.filterWords());
-		System.out.println("New word: " + newWord);
+		//System.out.println("New word: " + newWord);
 		
 		this.setWord(newWord);
-		
-		
 
 	}
 

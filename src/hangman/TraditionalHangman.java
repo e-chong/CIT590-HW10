@@ -8,7 +8,7 @@ import java.util.Random;
  *
  */
 public class TraditionalHangman extends Hangman {
-
+	
 	public TraditionalHangman(List<String> words) {
 		Random rand = new Random();
 		String randomWord = words.get(rand.nextInt(words.size()));
