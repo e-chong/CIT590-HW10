@@ -103,12 +103,12 @@ public class EvilHangman extends Hangman {
 	 */
 	public void setNewWord(char letter) {
 
-		//System.out.println("Current word: " + this.getWord());
-		
+		// System.out.println("Current word: " + this.getWord());
+
 		// Use the current guesses to filter the list of possible words
 		String newWord = this.randomChoose(letter, this.filterWords());
-		//System.out.println("New word: " + newWord);
-		
+		// System.out.println("New word: " + newWord);
+
 		this.setWord(newWord);
 
 	}
@@ -137,7 +137,7 @@ public class EvilHangman extends Hangman {
 				indices.add(i);
 			}
 		}
-		
+
 		// if the letter never occurs, the return list should be empty
 		return indices;
 	}
@@ -170,7 +170,7 @@ public class EvilHangman extends Hangman {
 			}
 		}
 		// return the unique combinations
-		
+
 		return uniqueCombinations;
 	}
 
@@ -191,8 +191,8 @@ public class EvilHangman extends Hangman {
 
 		// initialize a list of list to store the sublists
 		// same length with the number of unique combinations
-		ArrayList<ArrayList<String>> subLists = new ArrayList<>();		
-		
+		ArrayList<ArrayList<String>> subLists = new ArrayList<>();
+
 		for (int i = 0; i < filterWords.size(); i++) {
 
 			// store the word
@@ -204,7 +204,7 @@ public class EvilHangman extends Hangman {
 			// iterate through all existing unique combinations, and put the word into the
 			// corresponding one
 			for (int j = 0; j < combinations; j++) {
-				
+
 				subLists.add(new ArrayList<String>());
 
 				// check which combination the word corresponds to
@@ -239,7 +239,7 @@ public class EvilHangman extends Hangman {
 
 		// initialize an integer to record the largest length
 		int maxLen = 0;
-		
+
 		// iterate through all sublists to find their lengths
 		for (int i = 0; i < subLists.size(); i++) {
 
@@ -248,7 +248,7 @@ public class EvilHangman extends Hangman {
 
 			// store the length
 			int len = sub.size();
-			
+
 			// check if the sublist is longer
 			if (len > maxLen) {
 

@@ -177,9 +177,9 @@ public class Hangman {
 	 */
 	public boolean checkGameStatus() {
 		String currentLetters = this.getCorrectGuesses().stream().map(String::valueOf).collect(Collectors.joining());
-		
+
 		String word = this.getWord();
-		
+
 		if (currentLetters.equals(word)) {
 			return true;
 		} else {
